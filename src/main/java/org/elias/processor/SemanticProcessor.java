@@ -33,7 +33,7 @@ public class SemanticProcessor implements Processor {
     private Set<String> signoffs;
 
     private Pattern greeting_pattern;
-    private String greeting_regex = "\\s*(#1)\\s+([^,]*),*";
+    private String greeting_regex = "\\s*(#1)\\s+([^,\\s]*),*";
 
     private TesseractOCR ocr;
 
