@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.swing.*;
 
 /**
- * Created by Filip Elias on 26.11.17.
+ * Created by Filip Elias
  */
 @Configuration
 public class BeanConfiguration {

@@ -34,7 +34,7 @@ public class SemanticProcessor implements Processor {
 
     private Pattern greeting_pattern;
     private String greeting_regex = "\\s*(#1)\\s+([^,\\s]*),*";
-
+    private Pattern date_pattern=Pattern.compile(".*((19)|(20))\\d\\d.*");
     private TesseractOCR ocr;
 
     public SemanticProcessor(TesseractOCR ocr) {
@@ -50,7 +50,7 @@ public class SemanticProcessor implements Processor {
         addToResult(resultTuples, LINES_NAME, getNumberOfLines(content));
         addToResult(resultTuples, FROM_NAME, getFrom(content));
         addToResult(resultTuples, TO_NAME, getTo(content));
-        //  addToResult(resultTuples, DATE_NAME, getDate());
+        addToResult(resultTuples, DATE_NAME, getDate(content));
 
         return resultTuples;
     }
@@ -142,6 +142,17 @@ public class SemanticProcessor implements Processor {
             return null;
         }
         return null;
+    }
+
+    public String getDate(String content) {
+        logger.debug("Looking for to using regular expression");
+        Matcher matcher=date_pattern.matcher(content);
+        if (matcher.find()) {
+            String date = matcher.group(0);
+            return date;
+        }
+        return null;
+
     }
 
     private void addToResult(List<ResultTuple> resultTuples, String name, Object value) {

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Detects OS
+ * Helper class for os detection
  */
 public class OSDetection {
 
