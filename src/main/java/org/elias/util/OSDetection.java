@@ -1,17 +1,19 @@
 package org.elias.util;
 
-import org.elias.processor.FileProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Filip Elias on 26.11.17.
+ * Detects OS
  */
 public class OSDetection {
 
     private static Logger logger = LoggerFactory.getLogger(OSDetection.class);
 
-
+    /**
+     * Return current OS
+     * @return
+     */
     public static OpSystem getOS() {
         String os = System.getProperty("os.name");
         if (os.toLowerCase().indexOf("linux") != -1) {

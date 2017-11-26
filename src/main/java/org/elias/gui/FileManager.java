@@ -3,6 +3,7 @@ package org.elias.gui;
 import org.elias.entity.ProcessResult;
 import org.elias.entity.ResultTuple;
 import org.elias.ocr.TesseractOCR;
+import org.elias.ocr.TesseractProcess;
 import org.elias.processor.FileProcessor;
 import org.elias.processor.SemanticProcessor;
 import org.elias.service.FileService;
@@ -185,7 +186,11 @@ public class FileManager {
                         logger.error("Can't get image results: ", e);
                         dialogManager.showError("Error when processing image: " + e.getMessage());
                     }
-                    addRow(res);
+                    if(res == null){
+                        dialogManager.showError("Image processing failed");
+                    }else {
+                        addRow(res);
+                    }
                     if (fileInProgress.decrementAndGet() == 0) {
                         labelInProgress.setVisible(false);
                     }

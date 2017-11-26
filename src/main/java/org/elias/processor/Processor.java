@@ -1,6 +1,7 @@
 package org.elias.processor;
 
 import org.elias.entity.ResultTuple;
+import org.elias.util.OCRProcessingException;
 
 import java.io.File;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface Processor {
      * @param file file to be processed
      * @return Processing results
      */
-    List<ResultTuple> process(File file);
+    List<ResultTuple> process(File file) throws OCRProcessingException;
 
 
 }

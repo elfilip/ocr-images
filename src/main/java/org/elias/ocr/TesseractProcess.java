@@ -22,6 +22,10 @@ public class TesseractProcess implements TesseractOCR {
 
     public String doOCR(File image) throws OCRProcessingException {
         String command = TESS_COMMAND.replace("#1", image.getAbsolutePath());
+        String pathToTess = System.getProperty("ocr.tesseract.path");
+        if (pathToTess != null) {
+            command = command.replace("tesseract", pathToTess);
+        }
         logger.debug("Doing ocr for file: {}", image.getAbsolutePath());
         try {
             Process p = Runtime.getRuntime().exec(command);
@@ -34,7 +38,7 @@ public class TesseractProcess implements TesseractOCR {
             return res;
         } catch (IOException e) {
             logger.error("I/O error: ", e);
-            throw new OCRProcessingException("Can't load image.", e);
+            throw new OCRProcessingException("Can't process image. + "+e.getMessage(), e);
 
 
         } catch (InterruptedException e) {

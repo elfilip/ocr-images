@@ -42,14 +42,10 @@ public class SemanticProcessor implements Processor {
     }
 
     @Override
-    public List<ResultTuple> process(File file) {
+    public List<ResultTuple> process(File file) throws OCRProcessingException {
         logger.debug("Processing file using {} processor", SemanticProcessor.class.getName());
         String content = null;
-        try {
-            content = ocr.doOCR(file);
-        } catch (OCRProcessingException e) {
-            logger.error("Error when processing image", e);
-        }
+        content = ocr.doOCR(file);
         List<ResultTuple> resultTuples = new LinkedList<>();
         addToResult(resultTuples, LINES_NAME, getNumberOfLines(content));
         addToResult(resultTuples, FROM_NAME, getFrom(content));

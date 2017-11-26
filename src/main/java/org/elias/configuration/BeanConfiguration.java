@@ -23,11 +23,15 @@ public class BeanConfiguration {
 
     @Bean
     public TesseractOCR tesseractOCR() {
+        String useTess = System.getProperty("ocr.useTess4j");
+        if (useTess != null && useTess.equals("true")) {
+            return new TesseractTess4J();
+        }
         OpSystem os = OSDetection.getOS();
         if (os == OpSystem.LINUX) {
             return new TesseractProcess();
         } else {
-            return new TesseractTess4J();
+            return new TesseractProcess();
         }
     }
 
