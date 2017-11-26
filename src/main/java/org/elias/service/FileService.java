@@ -2,6 +2,7 @@ package org.elias.service;
 
 import org.elias.dao.ResultsDao;
 import org.elias.entity.ProcessResult;
+import org.elias.ocr.TesseractOCR;
 import org.elias.processor.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

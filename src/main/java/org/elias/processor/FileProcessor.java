@@ -3,6 +3,7 @@ package org.elias.processor;
 import org.elias.entity.ResultTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class FileProcessor implements Processor {
 
-    Logger logger = LoggerFactory.getLogger(FileProcessor.class);
+    private Logger logger = LoggerFactory.getLogger(FileProcessor.class);
 
     public static String SIZE_NAME = "Size(MB)";
     public static String FILENAME_NAME = "Name";

@@ -2,6 +2,7 @@ package org.elias.gui;
 
 import org.elias.entity.ProcessResult;
 import org.elias.entity.ResultTuple;
+import org.elias.ocr.TesseractOCR;
 import org.elias.processor.FileProcessor;
 import org.elias.processor.SemanticProcessor;
 import org.elias.service.FileService;
@@ -53,6 +54,9 @@ public class FileManager {
 
     @Autowired
     private DialogManager dialogManager;
+
+    @Autowired
+    private TesseractOCR ocr;
 
     private Map<String, Integer> columns = new LinkedHashMap<>();
     private int columnCount = 0;
@@ -106,7 +110,7 @@ public class FileManager {
     public void init() {
         logger.debug("Initiating application");
         fileService.registerProcessor(new FileProcessor());
-        fileService.registerProcessor(new SemanticProcessor());
+        fileService.registerProcessor(new SemanticProcessor(ocr));
         List<ProcessResult> data = fileService.loadData();
         if (data != null) {
             data.forEach(pres -> addRow(pres));

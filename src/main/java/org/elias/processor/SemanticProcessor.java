@@ -7,6 +7,7 @@ import org.elias.util.DictionaryUtil;
 import org.elias.util.OCRProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,10 +35,10 @@ public class SemanticProcessor implements Processor {
     private Pattern greeting_pattern;
     private String greeting_regex = "\\s*(#1)\\s+([^,]*),*";
 
-    private TesseractOCR ocr = new TesseractProcess();
+    private TesseractOCR ocr;
 
-    public SemanticProcessor() {
-
+    public SemanticProcessor(TesseractOCR ocr) {
+        this.ocr = ocr;
     }
 
     @Override

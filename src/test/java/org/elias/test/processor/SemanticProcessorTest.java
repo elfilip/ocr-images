@@ -1,5 +1,6 @@
 package org.elias.test.processor;
 
+import org.elias.ocr.TesseractProcess;
 import org.elias.processor.SemanticProcessor;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +10,7 @@ import org.junit.Test;
  */
 public class SemanticProcessorTest {
 
-    SemanticProcessor semanticProcessor = new SemanticProcessor();
+    SemanticProcessor semanticProcessor = new SemanticProcessor(new TesseractProcess());
 
     @Test
     public void testLinesZero() {

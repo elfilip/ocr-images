@@ -3,6 +3,9 @@ package org.elias.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elias.ocr.TesseractOCR;
 import org.elias.ocr.TesseractProcess;
+import org.elias.ocr.TesseractTess4J;
+import org.elias.util.OSDetection;
+import org.elias.util.OpSystem;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +23,12 @@ public class BeanConfiguration {
 
     @Bean
     public TesseractOCR tesseractOCR() {
-        return new TesseractProcess();
+        OpSystem os = OSDetection.getOS();
+        if (os == OpSystem.LINUX) {
+            return new TesseractProcess();
+        } else {
+            return new TesseractTess4J();
+        }
     }
 
     @Bean
