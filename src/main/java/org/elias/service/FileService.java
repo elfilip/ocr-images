@@ -38,12 +38,14 @@ public class FileService {
     public List<ProcessResult> loadData() {
 
         List<ProcessResult> processResults = resultsDao.loadResults();
-        results.addAll(processResults);
+        if (processResults != null)
+            results.addAll(processResults);
         return processResults;
     }
 
     /**
      * Add file to queue, waiting to be processed. More files can be processed at one time
+     *
      * @param file file to be processed
      */
     public void processFile(File file) {
@@ -66,6 +68,7 @@ public class FileService {
 
     /**
      * Returns one result from one queue
+     *
      * @return
      * @throws InterruptedException
      * @throws ExecutionException

@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Processor extract params from the text itself.
@@ -26,15 +28,20 @@ public class SemanticProcessor implements Processor {
     public static String FROM_NAME = "From";
     public static String TO_NAME = "To";
     public static String DATE_NAME = "Date";
+    public static String TOPIC_NAME = "Topic";
     private static String PATH_SIGNOFFS = "dict/farewell_dict.txt";
+    private static String PATH_STOPWORDS = "dict/stopwords.txt";
     private static String PATH_GREETINGS = "dict/greeting_dict.txt";
 
 
     private Set<String> signoffs;
 
+    private Set<String> stopWords;
+
+
     private Pattern greeting_pattern;
     private String greeting_regex = "\\s*(#1)\\s+([^,\\s]*),*";
-    private Pattern date_pattern=Pattern.compile(".*((19)|(20))\\d\\d.*");
+    private Pattern date_pattern = Pattern.compile(".*((19)|(20))\\d\\d.*");
     private TesseractOCR ocr;
 
     public SemanticProcessor(TesseractOCR ocr) {
@@ -51,6 +58,7 @@ public class SemanticProcessor implements Processor {
         addToResult(resultTuples, FROM_NAME, getFrom(content));
         addToResult(resultTuples, TO_NAME, getTo(content));
         addToResult(resultTuples, DATE_NAME, getDate(content));
+        addToResult(resultTuples, TOPIC_NAME, getTopics(content));
 
         return resultTuples;
     }
@@ -144,9 +152,58 @@ public class SemanticProcessor implements Processor {
         return null;
     }
 
+    /**
+     * Return 3 top used words in the document ignoring stopwords
+     *
+     * @param content
+     * @return
+     */
+    public String getTopics(String content) {
+        logger.debug("Looking for topics");
+        synchronized (this) {
+            if (stopWords == null) {
+                try {
+                    stopWords = DictionaryUtil.getWordList(PATH_STOPWORDS);
+                } catch (IOException e) {
+                    logger.error("Error whan loading stopwords", e);
+                    return null;
+                }
+            }
+        }
+
+        String[] words = content.toLowerCase().split("\\W");
+
+        if (words.length < 3) {
+            return null;
+        }
+
+        Map<String, Integer> count = Arrays.stream(words).filter(word -> isWordValid(word)).
+                collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(num -> 1)));
+
+        List<String> top = count.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(3).map(e -> e.getKey()).collect(Collectors.toList());
+
+        return top.stream().reduce("", (a, b) -> a + " " + b);
+
+
+    }
+
+    private boolean isWordValid(String word) {
+        if (word.trim().length() < 3) {
+            return false;
+        }
+        else if (word.matches(".*\\d.*")) {
+            return false;
+        } else if (stopWords.contains(word)) {
+            return false;
+        }
+        return true;
+    }
+
     public String getDate(String content) {
         logger.debug("Looking for to using regular expression");
-        Matcher matcher=date_pattern.matcher(content);
+        Matcher matcher = date_pattern.matcher(content);
         if (matcher.find()) {
             String date = matcher.group(0);
             return date;

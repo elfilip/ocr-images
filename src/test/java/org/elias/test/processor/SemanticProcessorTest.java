@@ -79,5 +79,13 @@ public class SemanticProcessorTest {
         Assert.assertNull(name);
     }
 
+    @Test
+    public void testTopics() {
+        String text = "plane3 car car plane3 train table service tram bus train tram car car tram";
+        String name = semanticProcessor.getTopics(text);
+
+        Assert.assertEquals(" car tram train", name);
+    }
+
 
 }
